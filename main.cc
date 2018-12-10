@@ -84,8 +84,8 @@ void Cleanup(list<argument> args) throw(string) {
 }
 
 int main() {
-    std::list<gaia::job> jobs;
-    gaia::job createuser;
+    list<job> jobs;
+    job createuser;
     createuser.handler = &CreateUser;
     createuser.title = "Create DB User";
     createuser.description = "Create DB User with least privileged permissions.";
@@ -95,7 +95,7 @@ int main() {
             "username",
     });
 
-    gaia::job migratedb;
+    job migratedb;
     migratedb.handler = &MigrateDB;
     migratedb.title = "DB Migration";
     migratedb.description = "Imports newest test data dump and migrates to newest version.";
@@ -106,31 +106,31 @@ int main() {
             "dbpassword",
     });
 
-    gaia::job createnamespace;
+    job createnamespace;
     createnamespace.handler = &CreateNamespace;
     createnamespace.title = "Create K8S Namespace";
     createnamespace.description = "Create a new Kubernetes namespace for the new test environment.";
     createnamespace.depends_on.push_back("DB Migration");
 
-    gaia::job createdeployment;
+    job createdeployment;
     createdeployment.handler = &CreateDeployment;
     createdeployment.title = "Create K8S Deployment";
     createdeployment.description = "Create a new Kubernetes deployment for the new test environment.";
     createdeployment.depends_on.push_back("Create K8S Namespace");
 
-    gaia::job createservice;
+    job createservice;
     createservice.handler = &CreateService;
     createservice.title = "Create K8S Service";
     createservice.description = "Create a new Kubernetes service for the new test environment.";
     createservice.depends_on.push_back("Create K8S Namespace");
 
-    gaia::job createingress;
+    job createingress;
     createingress.handler = &CreateIngress;
     createingress.title = "Create K8S Ingress";
     createingress.description = "Create a new Kubernetes ingress for the new test environment.";
     createingress.depends_on.push_back("Create K8S namespace");
 
-    gaia::job cleanup;
+    job cleanup;
     cleanup.handler = &Cleanup;
     cleanup.title = "Clean up";
     cleanup.description = "Removes all temporary files.";
